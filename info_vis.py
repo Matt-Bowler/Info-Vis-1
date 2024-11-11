@@ -59,7 +59,10 @@ def plot_heatmap(data, ax):
     ax.set_xticklabels(months, rotation=90)
     ax.set_yticks(range(10))
     ax.set_yticklabels(schools)
-    plt.colorbar(heatmap, ax=ax, orientation='vertical')
+    ax.set_xlabel("Month")
+    ax.set_ylabel("School")
+
+    plt.colorbar(heatmap, ax=ax, orientation='vertical').set_label("Absences", rotation=270)
 
 def plot_scatterplot(data, ax):
     ax.set_title("Chart 2")
