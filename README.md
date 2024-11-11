@@ -6,8 +6,13 @@
       ```console
       pip install -r requirements.txt
       ```
-3. Run info_vis.py using:
+3. Run info_vis.py using either:
       ```console
-      python info_vis.py
+      python info_vis.py scatter
       ```
+
+      ```console
+      python info_vis.py heatmap
+      ```
+      Depending on which graph you want the participant to use
 5. Results will be store in same directory as `info_vis.py`
