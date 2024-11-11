@@ -11,6 +11,7 @@
       python info_vis.py scatter
       ```
       or
+    
       ```console
       python info_vis.py heatmap
       ```
