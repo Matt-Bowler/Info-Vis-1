@@ -5,7 +5,6 @@ from uuid import uuid4
 import os
 import matplotlib
 import sys
-import random
 import numpy as np
 
 #Use QtAgg backend to allow fullscreen compatability on all devices
@@ -14,11 +13,10 @@ matplotlib.use("QtAgg")
 
 months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]   
 
-#replace with our Questions
-#e.g. in july there were 3 schools with more than 15 absences
+#TODO: Add more questions
 questions = [
-    "Question 1", 
-    "Question 2", 
+    "In July there were at least 3 schools with more than 30 absences", 
+    "School 5 had more absences than School 2 in January", 
     "Question 3", 
     "Question 4", 
     "Question 5", 
@@ -41,13 +39,33 @@ chart_type = ""
 def generate_dataset(trial_num):
     dataset = {}
     for i in range(10):
-        dataset[f"School_{i+1}"] = np.random.randint(0, 30, size=12)
+        dataset[f"School_{i+1}"] = np.random.randint(0, 50, size=12)
 
-    match trial_num:
-        #TODO: Depending on question (trial num) workout correct answer for random dataset generated above and append to correct_answers
+    match trial_num + 1:
+        #In July there were at least 3 schools with more than 30 absences
         case 1:
-            print("")
+            count = 0
+            for i in range(10):
+                if dataset[f"School_{i+1}"][months.index("Jul")] > 30:
+                    count += 1
+            correct_answers.append(1 if count >= 3 else 0)
+        #School 5 had more absences than School 2 in January
+        case 2:
+            if dataset[f"School_5"][months.index("Jan")] > dataset[f"School_2"][months.index("Jan")]:
+                correct_answer = 1
+            else:
+                correct_answer = 0
+            correct_answers.append(correct_answer)
+        #TODO: Continue to case 10
+        case _:
+            correct_answers.append(0)
+
+
     return dataset
+
+def add_jitter(values, jitter_amount):
+    values = np.asarray(values, dtype=float)
+    return values + np.random.uniform(-jitter_amount, jitter_amount, values.shape)
 
 def plot_heatmap(data, ax):
     schools = list(data.keys())
@@ -63,12 +81,21 @@ def plot_heatmap(data, ax):
     plt.colorbar(heatmap, ax=ax, orientation='vertical').set_label("Absences", rotation=270, labelpad = 15)
 
 def plot_scatterplot(data, ax):
-    for school, absences in data.items():
-        ax.scatter(months, absences, marker='o', label=school)
-    ax.set_xlabel("Month")
-    ax.set_ylabel("Absences")
+    month_positions = np.arange(len(months))
 
-    plt.xticks(rotation=90)
+    colors = plt.cm.inferno(np.linspace(0, 1, len(data)))
+    markers = ['o', '^', 's']  
+
+    for i, (school, absences) in enumerate(data.items()):
+        jittered_months = add_jitter(month_positions, jitter_amount=0.2)
+        jittered_absences = add_jitter(absences, jitter_amount=0.1)
+
+        ax.scatter(jittered_months, jittered_absences, marker=markers[i % len(markers)], color=colors[i], alpha=0.5, label=school, edgecolors="black")
+
+    ax.set_xlabel("Month", fontsize=12)
+    ax.set_ylabel("Absences", fontsize=12)
+    ax.set_xticks(month_positions)
+    ax.set_xticklabels(months, rotation=90)
 
     ax.legend(loc='upper left', fontsize='small', bbox_to_anchor=(1, 1))
 
@@ -104,7 +131,7 @@ def on_key_press(event, trial_num, start_time):
         correct_answer = correct_answers[trial_num]
         is_correct = 0
 
-        if event.key == correct_answer:
+        if event.key == str(correct_answer):
             is_correct = 1
 
         results.append({
