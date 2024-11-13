@@ -13,7 +13,6 @@ matplotlib.use("QtAgg")
 
 months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]   
 
-#TODO: Add more questions
 questions = [
     "In July there were at least 3 schools with more than 30 absences", 
     "School 5 had more absences than School 2 in January", 
@@ -21,15 +20,14 @@ questions = [
     "School 7 had less absences than School 4 in May", 
     "School 1 had more absences in January than in May", 
     "School 8 had less absences in March than in August",
-    "Question 7", 
-    "Question 8", 
-    "Question 9", 
-    "Question 10"
+    "School 3's absences were between 0 and 10 in February", 
+    "School 4 had at least 5 months with more than 25 absences", 
+    "School 9's absences were between 15 and 25 in December", 
+    "In November there were atleast 2 schools with absences between 10 and 20"
 ]
 
 #stores correct answers worked out at runtime
 correct_answers = []
-
 
 #results of experiment
 results = []
@@ -51,7 +49,7 @@ def generate_dataset(trial_num):
             correct_answers.append(1 if count >= 3 else 0)
         #School 5 had more absences than School 2 in January
         case 2:
-            if dataset[f"School_5"][months.index("Jan")] > dataset[f"School_2"][months.index("Jan")]:
+            if dataset["School_5"][months.index("Jan")] > dataset["School_2"][months.index("Jan")]:
                 correct_answer = 1
             else:
                 correct_answer = 0
@@ -65,28 +63,56 @@ def generate_dataset(trial_num):
             correct_answers.append(1 if count >= 2 else 0)
         #School 7 had less absences than School 4 in May
         case 4:
-            if dataset[f"School_7"][months.index("May")] < dataset[f"School_4"][months.index("May")]:
+            if dataset["School_7"][months.index("May")] < dataset["School_4"][months.index("May")]:
                 correct_answer = 1
             else:
                 correct_answer = 0
             correct_answers.append(correct_answer)
         #School 1 had more absences in January than in May
         case 5:
-            if dataset[f"School_1"][months.index("Jan")] > dataset[f"School_1"][months.index("May")]:
+            if dataset["School_1"][months.index("Jan")] > dataset["School_1"][months.index("May")]:
                 correct_answer = 1
             else:
                 correct_answer = 0
             correct_answers.append(correct_answer)
         #School 8 had less absences in March than in August
         case 6:
-            if dataset[f"School_8"][months.index("Mar")] < dataset[f"School_8"][months.index("Aug")]:
+            if dataset["School_8"][months.index("Mar")] < dataset["School_8"][months.index("Aug")]:
                 correct_answer = 1
             else:
                 correct_answer = 0
             correct_answers.append(correct_answer)
-        #TODO: Continue to case 10
-        case _:
-            correct_answers.append(0)
+        #School 3's absences were between 0 and 10 in February
+        case 7:
+            value = dataset["School_3"][months.index("Feb")]
+            if value > 0 and value <= 10:
+                correct_answer = 1
+            else:
+                correct_answer = 0
+            correct_answers.append(correct_answer)
+        #School 4 had at least 5 months with more than 25 absences 
+        case 8:
+            count = 0
+            for month in dataset["School_5"]:
+                if month > 25:
+                    count += 1
+            correct_answers.append(1 if count >= 5 else 0)
+        #School 9's absences were between 15 and 25 in December
+        case 9:
+            value = dataset["School_9"][months.index("Dec")]
+            if value > 15 and value <= 25:
+                correct_answer = 1
+            else:
+                correct_answer = 0
+            correct_answers.append(correct_answer)
+        #In November there were atleast 2 schools with absences between 10 and 20
+        case 10:
+            count = 0
+            for i in range(10):
+                value = dataset[f"School_{i+1}"][months.index("Nov")]
+                if value >= 10 and value <= 20:
+                    count += 1
+            correct_answers.append(1 if count >= 2 else 0)
 
     return dataset
 
