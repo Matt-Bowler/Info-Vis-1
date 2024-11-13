@@ -17,10 +17,10 @@ months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", 
 questions = [
     "In July there were at least 3 schools with more than 30 absences", 
     "School 5 had more absences than School 2 in January", 
-    "Question 3", 
-    "Question 4", 
-    "Question 5", 
-    "Question 6",
+    "In December there were at least 2 schools with less than 10 absences", 
+    "School 7 had less absences than School 4 in May", 
+    "School 1 had more absences in January than in May", 
+    "School 8 had less absences in March than in August",
     "Question 7", 
     "Question 8", 
     "Question 9", 
@@ -56,10 +56,37 @@ def generate_dataset(trial_num):
             else:
                 correct_answer = 0
             correct_answers.append(correct_answer)
+        #In December there were at least 2 schools with less than 10 absences
+        case 3:
+            count = 0
+            for i in range(10):
+                if dataset[f"School_{i+1}"][months.index("Dec")] < 10:
+                    count += 1
+            correct_answers.append(1 if count >= 2 else 0)
+        #School 7 had less absences than School 4 in May
+        case 4:
+            if dataset[f"School_7"][months.index("May")] < dataset[f"School_4"][months.index("May")]:
+                correct_answer = 1
+            else:
+                correct_answer = 0
+            correct_answers.append(correct_answer)
+        #School 1 had more absences in January than in May
+        case 5:
+            if dataset[f"School_1"][months.index("Jan")] > dataset[f"School_1"][months.index("May")]:
+                correct_answer = 1
+            else:
+                correct_answer = 0
+            correct_answers.append(correct_answer)
+        #School 8 had less absences in March than in August
+        case 6:
+            if dataset[f"School_8"][months.index("Mar")] < dataset[f"School_8"][months.index("Aug")]:
+                correct_answer = 1
+            else:
+                correct_answer = 0
+            correct_answers.append(correct_answer)
         #TODO: Continue to case 10
         case _:
             correct_answers.append(0)
-
 
     return dataset
 
