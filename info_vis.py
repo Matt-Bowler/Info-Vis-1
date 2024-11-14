@@ -31,7 +31,9 @@ correct_answers = []
 
 #results of experiment
 results = []
-#chart type used for experiment
+
+chart_types = ["scatter", "heatmap"]
+#stores current chart type being used
 chart_type = ""
 
 def generate_dataset(trial_num):
@@ -200,20 +202,10 @@ def on_key_press(event, trial_num, start_time):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) <= 1:
-        print("Usage: python info_vis.py <scatter/heatmap>")
-        exit(-1)
-    
-    if sys.argv[1].lower() == "scatter":
-        chart_type = "scatter"
-    elif sys.argv[1].lower() == "heatmap":
-        chart_type = "heatmap"
-    else:
-        print("Usage: python info_vis.py <scatter/heatmap>")
-        exit(-1)
-
-    for trial_num in range(0, 10):
-        display_next_trial(trial_num, chart_type)
+    for chart_num in range(2):
+        chart_type = chart_types[chart_num]
+        for trial_num in range(10):
+            display_next_trial(trial_num, chart_type)
 
     #UUID for participant anonimity
     fname = f"{uuid4()}.csv"
