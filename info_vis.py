@@ -199,6 +199,7 @@ def on_key_press(event, trial_num, start_time):
 
 if __name__ == "__main__":
     for chart_num in range(len(chart_types)):
+        correct_answers = []
         chart_type = chart_types[chart_num]
         for trial_num in range(10):
             display_next_trial(trial_num, chart_type)
