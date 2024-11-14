@@ -154,12 +154,9 @@ def plot_scatterplot(data, ax):
     ax.legend(loc='upper left', fontsize='small', bbox_to_anchor=(1, 1))
 
 
-
 def display_next_trial(trial_num, chart_type):
-    #change to 1 graph per trial
     fig, ax = plt.subplots()
 
-    #relace 0 with trial num
     if chart_type == "scatter":
         plot_scatterplot(generate_dataset(trial_num), ax)
     elif chart_type == "heatmap":
