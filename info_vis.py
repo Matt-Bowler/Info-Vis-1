@@ -4,7 +4,6 @@ import pandas as pd
 from uuid import uuid4
 import os
 import matplotlib
-import sys
 import numpy as np
 
 #Use QtAgg backend to allow fullscreen compatability on all devices
